@@ -1,75 +1,75 @@
-# 🧠 HypER & Friends — Apprentissage de Représentations pour Graphes de Connaissances
+# HypER & Friends — Learning Representations for Knowledge Graphs
 
-> 🎯 *Objectif : Apprendre à représenter les entités (ex: “Paris”, “France”) et les relations (ex: “capitale_de”) sous forme de vecteurs, pour prédire des faits manquants dans un graphe de connaissances.*
+> *Objective: Learn to represent entities (e.g., “Paris”, “France”) and relations (e.g., “capital_of”) as vectors, to predict missing facts in a knowledge graph.*
 
-Ce projet implémente et compare plusieurs modèles d’**embeddings de graphes de connaissances** (Knowledge Graph Embeddings) :
-- **HypER** — Modèle convolutionnel avec filtres hyper-réseaux
-- **ConvE** — Modèle convolutionnel 2D
-- **DistMult** — Modèle multiplicatif simple
-- **ComplEx** — Extension complexe de DistMult (gère les relations asymétriques)
-- **HypE** — Version antérieure de HypER
+This project implements and compares several **knowledge graph embedding** models:
+- **HypER** — Convolutional model with hypernetwork-generated filters
+- **ConvE** — 2D convolutional model
+- **DistMult** — Simple multiplicative model
+- **ComplEx** — Complex-valued extension of DistMult (handles asymmetric relations)
+- **HypE** — Earlier version of HypER
 
-Les modèles sont entraînés et évalués sur des benchmarks standards :
-- `FB15k-237` — sous-ensemble filtré de Freebase
-- `WN18RR` — sous-ensemble de WordNet sans fuites inverses
-- `FB15k`, `WN18` — versions originales (moins recommandées)
-
----
-
-## 📚 Contexte Scientifique
-
-Dans un **graphe de connaissances**, les faits sont représentés sous forme de triplets :  
-> `(sujet, relation, objet)` → ex: `(Paris, capitale_de, France)`
-
-L’objectif est de **prédire l’objet manquant** dans un triplet incomplet :  
-> `(Paris, capitale_de, ?)` → doit prédire `France`
-
-C’est ce qu’on appelle la **complétion de liens (link prediction)**.
-
-Les modèles apprennent des **représentations vectorielles** (embeddings) pour chaque entité et relation, puis combinent ces vecteurs pour prédire la probabilité qu’un triplet soit vrai.
+Models are trained and evaluated on standard benchmarks:
+- `FB15k-237` — Filtered subset of Freebase
+- `WN18RR` — Subset of WordNet without inverse relation leakage
+- `FB15k`, `WN18` — Original versions (less recommended due to test leakage)
 
 ---
 
-## 👥 Pour qui est ce projet ?
+## Scientific Background
 
-| Public | Ce qu’il y trouvera |
-|--------|----------------------|
-| 👩‍🎓 **Étudiants en IA / NLP / Graph ML** | Une implémentation claire de modèles avancés, parfaite pour apprendre ou comparer les architectures. |
-| 👨‍🔬 **Chercheurs / Ingénieurs en IA** | Un code fonctionnel, modulaire, facile à étendre ou adapter pour de nouvelles expériences. |
-| 👩‍💻 **Développeurs curieux** | Un exemple concret d’apprentissage de représentations sémantiques avec PyTorch. |
-| 👔 **Managers / Curieux** | Une démonstration de comment les machines “comprennent” les relations entre concepts du monde réel. |
+In a **knowledge graph**, facts are represented as triplets:  
+> `(subject, relation, object)` → e.g., `(Paris, capital_of, France)`
 
----
+The goal is to **predict the missing object** in an incomplete triplet:  
+> `(Paris, capital_of, ?)` → should predict `France`
 
-## ⚙️ Fonctionnalités & Modèles Implémentés
+This task is known as **link prediction**.
 
-### 🧩 Modèles Supportés
-
-| Modèle | Type | Description |
-|--------|------|-------------|
-| **HypER** | Convolutionnel + Hypernetwork | Génère dynamiquement les filtres de convolution à partir de la relation. Très efficace et léger. |
-| **ConvE** | Convolutionnel 2D | Concatène sujet et relation, applique une convolution 2D, puis une couche dense. |
-| **DistMult** | Multiplicatif | Score = `sujet ⊙ relation ⋅ objet` — simple mais ne gère pas l’asymétrie. |
-| **ComplEx** | Complexe | Extension de DistMult dans l’espace complexe — gère les relations asymétriques (ex: “parent_de”). |
-| **HypE** | Convolutionnel paramétré | Chaque relation a ses propres poids de convolution — plus lourd que HypER. |
-
-### 📊 Métriques d’Évaluation
-
-Le modèle est évalué via la tâche de **Link Prediction** :
-
-Pour chaque triplet `(s, r, o)` dans le jeu de test :
-- On masque l’objet `o`
-- On prédit tous les objets possibles
-- On calcule le **rang** de l’objet correct parmi les prédictions
-
-Métriques calculées :
-- **Hits@1, Hits@3, Hits@10** → % de fois où la bonne réponse est dans les 1/3/10 premières prédictions
-- **Mean Rank (MR)** → rang moyen de la bonne réponse
-- **Mean Reciprocal Rank (MRR)** → moyenne de `1/rang` → pénalise fortement les mauvais rangs
+Models learn **vector representations** (embeddings) for each entity and relation, then combine these vectors to predict the probability that a given triplet is true.
 
 ---
 
-## 🧩 Technologies & Bibliothèques
+## Target Audience
+
+| Audience | What They Will Find |
+|----------|----------------------|
+| **Students in AI / NLP / Graph ML** | A clear implementation of advanced models — ideal for learning or comparing architectures. |
+| **Researchers / AI Engineers** | Functional, modular code, easy to extend or adapt for new experiments. |
+| **Curious Developers** | A concrete example of semantic representation learning using PyTorch. |
+| **Managers / Non-Technical Readers** | A demonstration of how machines “understand” relationships between real-world concepts. |
+
+---
+
+## Features & Implemented Models
+
+### Supported Models
+
+| Model | Type | Description |
+|-------|------|-------------|
+| **HypER** | Convolutional + Hypernetwork | Dynamically generates convolutional filters from the relation. Highly effective and lightweight. |
+| **ConvE** | 2D Convolutional | Concatenates subject and relation, applies 2D convolution, then a dense layer. |
+| **DistMult** | Multiplicative | Score = `subject ⊙ relation ⋅ object` — simple but cannot handle asymmetry. |
+| **ComplEx** | Complex-Valued | Extension of DistMult in complex space — handles asymmetric relations (e.g., “parent_of”). |
+| **HypE** | Parameterized Convolutional | Each relation has its own convolutional weights — heavier than HypER. |
+
+### Evaluation Metrics
+
+Models are evaluated on the **Link Prediction** task:
+
+For each test triplet `(s, r, o)`:
+- Mask the object `o`
+- Predict all possible objects
+- Compute the **rank** of the correct object among predictions
+
+Metrics computed:
+- **Hits@1, Hits@3, Hits@10** → Percentage of times the correct answer is ranked in top 1/3/10
+- **Mean Rank (MR)** → Average rank of the correct answer
+- **Mean Reciprocal Rank (MRR)** → Mean of `1/rank` → strongly penalizes low-ranked correct answers
+
+---
+
+## Technologies & Libraries
 
 ```python
 import torch
